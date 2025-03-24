@@ -1,5 +1,6 @@
 import fs from "fs/promises";
 
+//read file function
 export async function loadFile(fileName) {
   try {
     const data = await fs.readFile(fileName, "utf-8");
@@ -16,6 +17,7 @@ export async function loadFile(fileName) {
   } catch (error) {
     if (error.code === "ENOENT") {
       await fs.writeFile(fileName, "[]", "utf-8");
+      return [];
     } else {
       console.error("Error reading file:", error);
     }
@@ -23,13 +25,12 @@ export async function loadFile(fileName) {
   }
 }
 
-//write file
-
+//write file function
 export async function editFile(fileName, body) {
   try {
     await fs.writeFile(fileName, JSON.stringify(body, null, 2), "utf-8");
   } catch (error) {
-    console.error("Error loading file:", error);
+    console.error("Error writing file:", error);
     throw error;
   }
 }
