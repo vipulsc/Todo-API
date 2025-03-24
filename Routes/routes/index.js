@@ -4,7 +4,6 @@ import fs from "fs/promises";
 export async function loadFile(fileName) {
   try {
     const data = await fs.readFile(fileName, "utf-8");
-    console.log("data--> ", data); //checkcheck
     if (!data.trim()) {
       return [];
     }
