@@ -1,9 +1,13 @@
 import fs from "fs/promises";
+import path from "path";
 
 //read file function
 export async function loadFile(fileName) {
+  const filePath = path.resolve(fileName);
+  console.log(`JSON file location: ${filePath}`);
   try {
     const data = await fs.readFile(fileName, "utf-8");
+    console.log(`File content (${fileName}):`, data);
     if (!data.trim()) {
       return [];
     }
