@@ -4,13 +4,22 @@ export async function loadFile(fileName) {
   try {
     const data = await fs.readFile(fileName, "utf-8");
     console.log("data--> ", data); //checkcheck
-
     if (!data.trim()) {
       return [];
     }
-    return JSON.parse(data);
+    try {
+      return JSON.parse(data);
+    } catch (parseError) {
+      console.error("Invalid JSON in file:", parseError);
+      return [];
+    }
   } catch (error) {
-    return error;
+    if (error.code === "ENOENT") {
+      await fs.writeFile(fileName, "[]", "utf-8");
+    } else {
+      console.error("Error reading file:", error);
+    }
+    return [];
   }
 }
 
@@ -20,6 +29,7 @@ export async function editFile(fileName, body) {
   try {
     await fs.writeFile(fileName, JSON.stringify(body, null, 2), "utf-8");
   } catch (error) {
+    console.error("Error loading file:", error);
     throw error;
   }
 }
