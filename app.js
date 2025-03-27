@@ -6,7 +6,28 @@ app.use(express.json());
 const port = 3000;
 import { loadFile, editFile } from "./index.js";
 import jwt from "jsonwebtoken";
+import { cors } from "cors";
 
+app.use(express.json());
+
+const allowedOrigins = ["http://localhost:5500", "https://yourfrontend.com"];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true); // Allow request
+      } else {
+        callback(new Error("Not allowed by CORS")); // Block request
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
+    credentials: true, // Allow cookies if needed
+  })
+);
+
+app.use(cors());
 // AUTHENTICATION
 
 app.post("/signup", async (req, res) => {
