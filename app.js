@@ -27,7 +27,6 @@ app.use(
   })
 );
 
-app.use(cors());
 // AUTHENTICATION
 
 app.post("/signup", async (req, res) => {
