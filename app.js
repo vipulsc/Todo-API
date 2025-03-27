@@ -6,9 +6,7 @@ app.use(express.json());
 const port = 3000;
 import { loadFile, editFile } from "./index.js";
 import jwt from "jsonwebtoken";
-import { cors } from "cors";
-
-app.use(express.json());
+import cors  from "cors";
 
 const allowedOrigins = ["http://localhost:5500", "https://yourfrontend.com"];
 
