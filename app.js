@@ -204,6 +204,20 @@ app.delete("/task/delete", authorization, async (req, res) => {
   }
 });
 
+app.get("/me", authorization, async (req, res) => {
+  const users = await loadFile("user.json");
+  const userid = req.userid;
+
+  try {
+    if (userid) {
+      const currentUser = users.find((index) => index.id === userid);
+      res.json({ username: currentUser.username });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
