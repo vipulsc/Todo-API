@@ -28,6 +28,10 @@ app.use(cors());
 
 // AUTHENTICATION
 
+app.get("/", (req, res) => {
+  res.send("API is running...");
+});
+
 app.post("/signup", async (req, res) => {
   try {
     let users = await loadFile("user.json");
@@ -205,15 +209,16 @@ app.delete("/task/delete", authorization, async (req, res) => {
 });
 
 app.get("/me", authorization, async (req, res) => {
-  const users = await loadFile("user.json");
-  const userid = req.userid;
-
   try {
-    if (userid) {
-      const currentUser = users.find((index) => index.id === userid);
-      res.json({ username: currentUser.username });
+    const users = (await loadFile("user.json")) || [];
+    const currentUser = users.find((u) => u.userid === req.userid);
+    if (!currentUser) {
+      return res.status(404).json({ error: "User not found" });
     }
+
+    res.json({ username: currentUser.username });
   } catch (error) {
+    console.error("❌ Error fetching user:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
